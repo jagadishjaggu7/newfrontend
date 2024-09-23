@@ -1,3 +1,6 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy Node.js app to Azure Web App - newfrontend
 
 on:
@@ -18,7 +21,7 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: Install dependencies, build, and test
+      - name: npm install, build, and test
         run: |
           npm install
           npm run build --if-present
@@ -26,19 +29,24 @@ jobs:
         env:
           CI: false  
 
+      - name: List files for debug
+        run: |
+          echo "Current directory contents:"
+          ls -la
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
           path: |
-            ./**                 # Include all files and directories
-            !node_modules/**     # Exclude node_modules directory
-            !coverage/**         # Exclude coverage directory
-            !build/**            # Exclude build directory
-            !*.log               # Exclude log files
-            !.DS_Store           # Exclude .DS_Store
-            !.env.*              # Exclude environment files
-          if-no-files-found: error  # Change to error to see if any files are included
+            ./**                     # Include all files and directories
+            !node_modules/**         # Exclude node_modules directory
+            !coverage/**             # Exclude coverage directory
+            !build/**                # Exclude build directory
+            !*.log                   # Exclude log files
+            !.DS_Store               # Exclude .DS_Store
+            !.env.*                  # Exclude environment files
+          if-no-files-found: error   # Trigger error if no files are found
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,7 +55,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write # Required for requesting the JWT
+      id-token: write # This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
@@ -58,14 +66,14 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_DD57E6949242421EBE53ECE73972BC34 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9F50EC984AF4487484FA34E8865A2B70 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_FC4338B7BE6D4098AD0F8EB11E2946B2 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
-      - name: Deploy to Azure Web App
+      - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
           app-name: 'newfrontend'
           slot-name: 'Production'
-          package: .  # Adjust this if needed
+          package: .
