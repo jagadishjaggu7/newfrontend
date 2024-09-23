@@ -36,7 +36,8 @@ jobs:
           name: node-app
           path: |
             **/*
-            !node_modules/**   # Exclude node_modules to prevent too many open files error
+            !node_modules/**   # Exclude node_modules directory to prevent too many files error
+            !**/*.log          # Exclude log files if any
           if-no-files-found: warn
 
   deploy:
