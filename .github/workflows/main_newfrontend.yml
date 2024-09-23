@@ -27,14 +27,21 @@ jobs:
           npm run build --if-present
           npm run test --if-present -- --passWithNoTests
         env:
-          CI: false  
+          CI: false 
+
+      - name: Print Current Directory
+        run: |
+          echo "Current working directory:"
+          pwd
+          echo "Directory contents:"
+          ls -la   
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
           path: |
-            .                    # Include all files and directories
+            newfrontend/**           # Include all files and directories
             !node_modules/**         # Exclude node_modules directory
             !coverage/**             # Exclude coverage directory
             !build/**                # Exclude build directory
