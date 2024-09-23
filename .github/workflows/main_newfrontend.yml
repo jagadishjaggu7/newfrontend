@@ -32,7 +32,7 @@ jobs:
       - name: List files for debug
         run: |
           echo "Current directory contents:"
-          ls -la
+          Get-ChildItem -Recurse
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
