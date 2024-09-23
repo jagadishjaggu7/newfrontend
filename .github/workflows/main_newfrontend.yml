@@ -35,9 +35,18 @@ jobs:
         with:
           name: node-app
           path: |
-            **/*
-            !node_modules/**   # Exclude node_modules directory to prevent too many files error
-            !**/*.log          # Exclude log files if any
+            **/*                    # Upload all necessary files
+            !node_modules/**        # Exclude node_modules
+            !.pnp/**                # Exclude .pnp directory
+            !.pnp.js                # Exclude .pnp.js
+            !coverage/**            # Exclude coverage directory
+            !build/**               # Exclude build directory
+            !.DS_Store              # Exclude .DS_Store
+            !*.log                  # Exclude log files
+            !yarn-debug.log*        # Exclude yarn debug logs
+            !yarn-error.log*        # Exclude yarn error logs
+            !npm-debug.log*         # Exclude npm debug logs
+            !.env.*                 # Exclude environment files
           if-no-files-found: warn
 
   deploy:
